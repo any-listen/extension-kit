@@ -71,4 +71,4 @@ jobs:
       - name: Build src code
         run: npm run build
 
-      - run: npm publish
+      - run: npm publish --access public
