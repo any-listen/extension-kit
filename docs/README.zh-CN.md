@@ -1,25 +1,25 @@
 # Any Listen Extension Kit
 
-English | [简体中文](docs/README.zh-CN.md)
+[English](../README.md) | 简体中文
 
-Any Listen extension kit for developing Any Listen extensions. It provides build tooling, type definitions, and shared configs to package extensions as `.alix` bundles.
+Any Listen 的扩展开发套件，提供构建工具、类型定义和通用配置，用于打包 `.alix` 扩展。
 
-## Features
+## 功能
 
-- Extension host API types
-- Extension build and packaging (`.alix`)
-- ESLint config preset
-- TypeScript config presets
+- 扩展宿主 API 类型
+- 扩展构建与打包（`.alix`）
+- ESLint 配置预设
+- TypeScript 配置预设
 
-## Install
+## 安装
 
 ```bash
 pnpm add -D @any-listen/extension-kit
 ```
 
-## Quick Start
+## 快速开始
 
-1) Project layout (example)
+1) 项目结构（示例）
 
 ```text
 your-extension/
@@ -33,7 +33,7 @@ your-extension/
     changeLog.md
 ```
 
-2) Create `config.ts`
+2) 创建 `config.ts`
 
 ```ts
 import type { ExtensionConfig } from '@any-listen/extension-kit/config'
@@ -74,20 +74,20 @@ const config: ExtensionConfig = {
 export default config
 ```
 
-3) Add `.env` for signing
+1) 配置 `.env`（签名）
 
 ```text
 PRI_KEY=<base64-or-pem-single-line>
 PUB_KEY=<base64-or-pem-single-line>
 ```
 
-4) Build
+4) 构建
 
 ```bash
 npx @any-listen/extension-kit --build
 ```
 
-The build produces:
+构建产物：
 
 - `dist/main.js`
 - `dist/manifest.json`
@@ -95,30 +95,30 @@ The build produces:
 - `dist/i18n/*`
 - `build/<id>_v<version>.alix`
 
-## Publish Metadata
+## 发布元数据
 
 ```bash
 npx @any-listen/extension-kit --publish
 ```
 
-This updates `publish/version.json` using `publish/changeLog.md` and `download_url_template`. It prevents publishing the same version twice.
+该命令会基于 `publish/changeLog.md` 和 `download_url_template` 生成/更新 `publish/version.json`，并阻止重复版本发布。
 
-## Build Config
+## 构建配置
 
-`buildConfig` in `config.ts`:
+`config.ts` 中的 `buildConfig`：
 
-- `srcDir`: Source directory (default `src`)
-- `distDir`: Build output directory (default `dist`)
-- `outputDir`: Package output directory (default `build`)
-- `i18nDir`: i18n assets directory (default `i18n`)
-- `resourcesDir`: Resource assets directory (default `resources`)
-- `isIsolateMode`: Enable isolate preload build (default `false`)
-- `mainEntry`: Main entry file (default `src/index.ts`)
-- `isolatePreloadEntry`: Isolate preload entry (default `src/isolate-preload/index.ts`)
+- `srcDir`：源码目录（默认 `src`）
+- `distDir`：构建输出目录（默认 `dist`）
+- `outputDir`：打包输出目录（默认 `build`）
+- `i18nDir`：i18n 资源目录（默认 `i18n`）
+- `resourcesDir`：资源目录（默认 `resources`）
+- `isIsolateMode`：启用 isolate 构建（默认 `false`）
+- `mainEntry`：主入口文件（默认 `src/index.ts`）
+- `isolatePreloadEntry`：isolate 预加载入口（默认 `src/isolate-preload/index.ts`）
 
-## Manifest Fields
+## Manifest 字段
 
-The extension manifest is derived from `config.ts`. Key fields:
+扩展 manifest 由 `config.ts` 生成，常用字段：
 
 - `id`, `name`, `version`
 - `description`, `icon`, `author`, `homepage`, `license`
@@ -126,13 +126,13 @@ The extension manifest is derived from `config.ts`. Key fields:
 - `contributes.resource`, `contributes.listProviders`, `contributes.settings`, `contributes.commands`
 - `download_url_template`
 
-## Isolate Mode
+## Isolate 模式
 
-When `isIsolateMode` is enabled, the build also outputs `resources/isolate-preload.js` from `isolatePreloadEntry`. Use `grant: ['isolate_context']` if your extension needs isolate context.
+启用 `isIsolateMode` 后，会额外输出 `resources/isolate-preload.js`。如需 isolate 上下文权限，请设置 `grant: ['isolate_context']`。
 
-## TypeScript and ESLint
+## TypeScript 与 ESLint
 
-Use built-in presets:
+可使用内置预设：
 
 ```json
 {
@@ -146,6 +146,6 @@ import config from '@any-listen/extension-kit/eslint.config.js'
 export default config
 ```
 
-## License
+## 许可证
 
 Apache License 2.0
