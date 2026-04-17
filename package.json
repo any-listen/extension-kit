@@ -1,0 +1,81 @@
+{
+  "name": "@any-listen/extension-kit",
+  "version": "0.1.0",
+  "keywords": [
+    "any-listen",
+    "any-listen-extension"
+  ],
+  "homepage": "https://github.com/any-listen/extension-kit#readme",
+  "bugs": {
+    "url": "https://github.com/any-listen/extension-kit/issues"
+  },
+  "license": "Apache-2.0",
+  "author": {
+    "name": "lyswhut",
+    "email": "lyswhut@qq.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/any-listen/extension-kit.git"
+  },
+  "bin": "dist/bin.js",
+  "files": [
+    "dist",
+    "types",
+    "tsconfigs",
+    "eslint",
+    "src",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ],
+  "type": "module",
+  "types": "./types/app/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/app/index.d.ts"
+    },
+    "./config": {
+      "types": "./types/build.d.ts"
+    },
+    "./isolate": {
+      "types": "./types/isolate.d.ts"
+    },
+    "./tsconfig.app.json": {
+      "default": "./tsconfigs/tsconfig.app.json"
+    },
+    "./tsconfig.node.json": {
+      "default": "./tsconfigs/tsconfig.node.json"
+    },
+    "./tsconfig.isolate.json": {
+      "default": "./tsconfigs/tsconfig.isolate.json"
+    },
+    "./eslint.config.js": {
+      "default": "./eslint/eslint.config.js"
+    }
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@eslint/js": "^9.39.4",
+    "@tsconfig/node24": "^24.0.4",
+    "@tsconfig/recommended": "^1.0.13",
+    "@typescript-eslint/eslint-plugin": "^8.58.1",
+    "@typescript-eslint/parser": "^8.58.1",
+    "eslint-config-love": "^152.0.0",
+    "globals": "^17.5.0",
+    "tar": "^7.5.13",
+    "vite": "^8.0.8"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "eslint": "^9.39.4",
+    "oxfmt": "^0.44.0",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "eslint": "^9.39.4"
+  },
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
+}

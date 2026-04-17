@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ESNext"],
+    "outDir": "./dist/isolate"
+    // "typeRoots": ["./src/types", "./src/isolate-preload/types"]
+  }
+  // "include": [
+  //   "./src/isolate-preload/**/*.d.ts",
+  //   "./src/isolate-preload/**/*.ts",
+  //   "./src/isolate-preload/**/*.js",
+  //   "./src/isolate-preload/**/*.mjs",
+  //   "./src/types/**/*.d.ts"
+  // ],
+  // "exclude": ["node_modules", "dist"]
+}
