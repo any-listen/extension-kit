@@ -46,7 +46,7 @@ const config: ExtensionConfig = {
   author: 'Your Name',
   homepage: 'https://example.com',
   license: 'MIT',
-  target_engine: 'any-listen',
+  target_engine: '1.0.0',
   categories: ['music'],
   tags: ['example'],
   grant: ['internet'],

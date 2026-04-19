@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process'
 import { builtinModules } from 'node:module'
 import path from 'node:path'
 
@@ -7,6 +8,30 @@ import { dependencies } from './package.json' with { type: 'json' }
 
 const rootPath = path.join(import.meta.dirname, './')
 const projectPath = path.join(rootPath, 'src')
+
+const gitInfo = {
+  commit_id: '',
+  commit_date: '',
+}
+try {
+  if (!execSync('git status --porcelain').toString().trim()) {
+    gitInfo.commit_id = execSync('git log -1 --pretty=format:"%H"').toString().trim()
+    gitInfo.commit_date = execSync('git log -1 --pretty=format:"%ad" --date=iso-strict').toString().trim()
+  } else if (process.env.IS_CI) {
+    console.error('Working directory is not clean')
+    process.exit(1)
+  }
+} catch (err) {
+  if (process.env.IS_CI) {
+    const commitId = process.env.GIT_COMMIT_ID
+    const commitDate = process.env.GIT_COMMIT_DATE
+    if (!commitId || !commitDate) {
+      throw new Error('GIT_COMMIT_ID and GIT_COMMIT_DATE environment variables are required in CI', { cause: err })
+    }
+    gitInfo.commit_id = commitId
+    gitInfo.commit_date = commitDate
+  }
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -32,7 +57,7 @@ export default defineConfig({
       fileName: 'bin',
     },
     rolldownOptions: {
-      external: ['any-listen', ...builtinModules.flatMap((m) => [m, `node:${m}`]), ...Object.keys(dependencies)],
+      external: [...builtinModules.flatMap((m) => [m, `node:${m}`]), ...Object.keys(dependencies)],
     },
   },
 })
