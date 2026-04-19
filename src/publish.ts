@@ -24,7 +24,7 @@ export const run = async () => {
       date: versionInfo.date,
     })
   } else {
-    versionInfo = { version: '', download_url: '', log: '', date: new Date().toISOString() }
+    versionInfo = { version: '', download_url: '', log: '', date: new Date().toISOString(), history: [] }
   }
   versionInfo.version = config.version
   if (config.download_url_template) {
