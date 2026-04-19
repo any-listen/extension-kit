@@ -3,8 +3,6 @@ import { defineConfig } from 'vite'
 import { EXTENSION } from './constants'
 import { state } from './state'
 
-const isProd = process.env.NODE_ENV == 'production'
-
 const createBuildConfig = (name: string, filePath: string) => {
   return defineConfig({
     base: './',
@@ -19,11 +17,6 @@ const createBuildConfig = (name: string, filePath: string) => {
       target: 'esnext',
       emptyOutDir: true,
       minify: false,
-      watch: isProd
-        ? null
-        : {
-            buildDelay: 500,
-          },
       outDir: state.distDir,
       rolldownOptions: {
         external: ['any-listen'],
