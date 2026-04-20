@@ -62,7 +62,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add package.json
-          git commit -m "chore: update package version to ${{ needs.CheckTag.outputs.tag }}"
+          git commit -m "chore: update package version to v${{ needs.CheckTag.outputs.tag }}"
           git push origin HEAD:main
 
       - name: Install Dependencies
@@ -72,3 +72,43 @@ jobs:
         run: npm run build
 
       - run: npm publish --access public
+
+  UpdateTemplate:
+    needs: [CheckTag, Release]
+    name: Update Template
+    runs-on: ubuntu-latest
+    if: needs.CheckTag.outputs.tag != ''
+    steps:
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Check out git repository
+        uses: actions/checkout@v6
+        with:
+          repository: any-listen/extension-template
+          token: ${{ secrets.GH_TEMPLATE_PAT }}
+
+      - name: Install Dependencies
+        run: corepack enable && npm install -g corepack@latest && pnpm -F ./packages/* install --frozen-lockfile
+
+      - name: Update template version
+        run: |
+          pnpm -F ./packages/* install @any-listen/extension-kit@${{ needs.CheckTag.outputs.tag }}
+          npm version patch --no-git-tag-version
+
+      - name: Push Code
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          git checkout package.json
+          git config user.name "lyswhut"
+          git config user.email "lyswhut@qq.com"
+          git status
+          git add .
+          git commit -m "chore: update @any-listen/extension-kit version to v$PACKAGE_VERSION in package.json"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_TEMPLATE_PAT }}@github.com/any-listen/extension-template.git
+          git push origin main
+          git tag v$PACKAGE_VERSION
+          git push --tag
