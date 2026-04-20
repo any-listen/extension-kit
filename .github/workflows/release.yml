@@ -47,9 +47,6 @@ jobs:
       - name: Check out git repository
         uses: actions/checkout@v6
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
-
       - name: Install Node.js
         uses: actions/setup-node@v6
         with:
@@ -69,7 +66,7 @@ jobs:
           git push origin HEAD:main
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: corepack enable && npm install -g corepack@latest && pnpm install --frozen-lockfile
 
       - name: Build src code
         run: npm run build
