@@ -568,14 +568,40 @@ declare namespace AnyListen {
       isCollect: boolean
     }
   }
+
+  namespace Resource {
+    interface SongListItem {
+      play_count: string
+      id: string
+      author: string
+      name: string
+      time?: string
+      img: string
+      // grade: basic.favorcnt / 10,
+      desc: string | null
+      total?: string
+    }
+
+    interface CommonItem {
+      id: string
+      name: string
+    }
+    type TagItem = CommonItem
+    interface TagGroupItem {
+      name: string
+      list: CommonItem[]
+    }
+
+    type BoardItem = CommonItem
+  }
 }
 
-interface IPCActionBase<A> {
-  action: A
-}
-interface IPCActionData<A, D> extends IPCActionBase<A> {
-  data: D
-}
+// interface IPCActionBase<A> {
+//   action: A
+// }
+// interface IPCActionData<A, D> extends IPCActionBase<A> {
+//   data: D
+// }
 interface CommonParams {
   extensionId: string
   source: string
@@ -594,7 +620,7 @@ interface LyricSearchResult {
   name: string
   artist?: string
   interval?: number
-  lyric?: string
+  lyric?: AnyListen.Music.LyricInfo
 }
 interface LyricDetailParams extends CommonParams {
   id: string
@@ -602,6 +628,10 @@ interface LyricDetailParams extends CommonParams {
 interface PicSearchParams extends CommonParams {
   name: string
   artist?: string
+  interval?: number
+}
+interface SonglistSearchParams extends CommonListParams {
+  keyword: string
 }
 interface SearchParams extends CommonListParams {
   name: string
@@ -613,6 +643,13 @@ interface ListDetailParams extends CommonListParams {
 interface SonglistListParams extends CommonListParams {
   sort: string
   tag: string
+}
+interface LeaderboardDateParams extends CommonParams {
+  id: string
+}
+interface LeaderboardDetailParams extends CommonListParams {
+  id: string
+  date: string
 }
 export interface ListCommonResult<T> {
   list: T[]
@@ -628,34 +665,6 @@ interface MusicUrlParams extends MusicCommonParams {
   quality?: string
   type?: AnyListen.Music.FileType
 }
-interface MusicUrlInfo {
-  url: string
-  quality: string
-}
-
-interface SongListItem {
-  play_count: string
-  id: string
-  author: string
-  name: string
-  time?: string
-  img: string
-  // grade: basic.favorcnt / 10,
-  desc: string | null
-  total?: string
-}
-
-interface CommonItem {
-  id: string
-  name: string
-}
-type TagItem = CommonItem
-interface TagGroupItem {
-  name: string
-  list: CommonItem[]
-}
-
-type BoardItem = CommonItem
 
 declare global {
   namespace AnyListen_API {
@@ -997,7 +1006,8 @@ declare global {
     type MusicSearchResult = ListCommonResult<AnyListen.Music.MusicInfoOnline>
 
     interface ResourceAction {
-      // ('tipSearch' | 'hotSearch', CommonParams) => Promise<string[]>
+      tipSearch: (params: CommonParams) => Promise<string[]>
+      hotSearch: (params: CommonParams) => Promise<string[]>
       musicSearch: (params: SearchParams) => Promise<ListCommonResult<AnyListen.Music.MusicInfoOnline>>
       musicPic: (params: MusicCommonParams) => Promise<string>
       musicUrl: (params: MusicUrlParams) => Promise<MusicUrlInfo>
@@ -1005,14 +1015,14 @@ declare global {
       musicPicSearch: (params: PicSearchParams) => Promise<string[]>
       lyricSearch: (params: LyricSearchParams) => Promise<LyricSearchResult[]>
       lyricDetail: (params: LyricDetailParams) => Promise<AnyListen.Music.LyricInfo>
-      // songlistSearch: (params: SearchParams) => Promise<ListCommonResult<AnyListen.Resource.SongListItem>>
-      // songlistSorts: (params: CommonParams) => Promise<AnyListen.Resource.TagItem[]>
-      // songlistTags: (params: CommonParams) => Promise<AnyListen.Resource.TagGroupItem[]>
-      // songlist: (params: SonglistListParams) => Promise<ListCommonResult<AnyListen.Resource.SongListItem>>
-      // songlistDetail: (params: ListDetailParams) => Promise<ListCommonResult<Music.MusicInfoOnline>>
-      // leaderboard: (params: CommonParams) => Promise<AnyListen.Resource.TagGroupItem[]>
-      // leaderboardDate: (params: SonglistListParams) => Promise<ListCommonResult<Music.MusicInfoOnline>>
-      // leaderboardDetail: (params: SonglistListParams) => Promise<ListCommonResult<Music.MusicInfoOnline>>
+      songlistSearch: (params: SonglistSearchParams) => Promise<ListCommonResult<AnyListen.Resource.SongListItem>>
+      songlistSorts: (params: CommonParams) => Promise<AnyListen.Resource.TagItem[]>
+      songlistTags: (params: CommonParams) => Promise<AnyListen.Resource.TagGroupItem[]>
+      songlist: (params: SonglistListParams) => Promise<ListCommonResult<AnyListen.Resource.SongListItem>>
+      songlistDetail: (params: ListDetailParams) => Promise<ListCommonResult<AnyListen.Music.MusicInfoOnline>>
+      leaderboard: (params: CommonParams) => Promise<AnyListen.Resource.TagGroupItem[]>
+      leaderboardDate: (params: LeaderboardDateParams) => Promise<AnyListen.Resource.TagItem[]>
+      leaderboardDetail: (params: LeaderboardDetailParams) => Promise<ListCommonResult<AnyListen.Music.MusicInfoOnline>>
     }
 
     interface BackupDataAction {
