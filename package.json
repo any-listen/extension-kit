@@ -61,21 +61,21 @@
     "@eslint/js": "^9.39.4",
     "@tsconfig/node24": "^24.0.4",
     "@tsconfig/recommended": "^1.0.13",
-    "@typescript-eslint/eslint-plugin": "^8.58.1",
-    "@typescript-eslint/parser": "^8.58.1",
-    "eslint-config-love": "^152.0.0",
-    "globals": "^17.5.0",
-    "tar": "^7.5.13",
-    "vite": "^8.0.8"
+    "@typescript-eslint/eslint-plugin": "^8.59.2",
+    "@typescript-eslint/parser": "^8.59.2",
+    "eslint-config-love": "^154.0.0",
+    "globals": "^17.6.0",
+    "tar": "^7.5.14",
+    "vite": "^8.0.11"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
     "eslint": "^9.39.4",
-    "oxfmt": "^0.44.0",
+    "oxfmt": "^0.48.0",
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "eslint": "^9.39.4"
   },
-  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
+  "packageManager": "pnpm@10.33.4+sha512.1c67b3b359b2d408119ba1ed289f34b8fc3c6873412bec6fd264fbdc82489e510fcbecb9ce9d22dae7f3b76269d8441046014bdca53b9979cd7a561ad631b800"
 }
