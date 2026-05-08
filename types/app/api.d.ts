@@ -579,7 +579,7 @@ declare namespace AnyListen {
       img: string
       // grade: basic.favorcnt / 10,
       desc: string | null
-      total?: string
+      total?: number
     }
 
     interface CommonItem {
@@ -610,6 +610,11 @@ interface CommonListParams extends CommonParams {
   page: number
   limit: number
 }
+interface MusicSearchParams extends CommonListParams {
+  name: string
+  artist?: string
+  albumName?: string
+}
 interface LyricSearchParams extends CommonParams {
   name: string
   artist?: string
@@ -633,10 +638,6 @@ interface PicSearchParams extends CommonParams {
 interface SonglistSearchParams extends CommonListParams {
   keyword: string
 }
-interface SearchParams extends CommonListParams {
-  name: string
-  artist?: string
-}
 interface ListDetailParams extends CommonListParams {
   id: string
 }
@@ -650,6 +651,26 @@ interface LeaderboardDateParams extends CommonParams {
 interface LeaderboardDetailParams extends CommonListParams {
   id: string
   date: string
+}
+interface MusicCommentParams extends CommonListParams {
+  musicInfo: AnyListen.Music.MusicInfoOnline
+  id?: string
+  type: 'hot' | 'new' | 'reply'
+}
+export interface MusicComment {
+  id: string
+  userId?: string
+  userName: string
+  text: string
+  time?: number
+  images?: string[]
+  location?: string
+  avatar?: string
+  likedCount?: number
+  skipPage?: boolean
+  replyTotal?: number
+  reply?: MusicComment[]
+  replySkipPage?: boolean
 }
 export interface ListCommonResult<T> {
   list: T[]
@@ -713,6 +734,11 @@ declare global {
     type Quality = '128k' | '320k' | 'flac' | 'flac24bit' | '192k' | 'wav' | 'dobly' | 'master'
     type MusicInfo = AnyListen.Music.MusicInfo
     type MusicInfoOnline = AnyListen.Music.MusicInfoOnline
+    type SongListItem = AnyListen.Resource.SongListItem
+    type CommonItem = AnyListen.Resource.CommonItem
+    type TagItem = AnyListen.Resource.TagItem
+    type TagGroupItem = AnyListen.Resource.TagGroupItem
+    type BoardItem = AnyListen.Resource.BoardItem
 
     type ParamsData = Record<string, string | number | null | undefined | boolean>
     interface RequestOptions {
@@ -1008,7 +1034,7 @@ declare global {
     interface ResourceAction {
       tipSearch: (params: CommonParams) => Promise<string[]>
       hotSearch: (params: CommonParams) => Promise<string[]>
-      musicSearch: (params: SearchParams) => Promise<ListCommonResult<AnyListen.Music.MusicInfoOnline>>
+      musicSearch: (params: MusicSearchParams) => Promise<ListCommonResult<AnyListen.Music.MusicInfoOnline>>
       musicPic: (params: MusicCommonParams) => Promise<string>
       musicUrl: (params: MusicUrlParams) => Promise<MusicUrlInfo>
       musicLyric: (params: MusicCommonParams) => Promise<AnyListen.Music.LyricInfo>
@@ -1023,6 +1049,7 @@ declare global {
       leaderboard: (params: CommonParams) => Promise<AnyListen.Resource.TagGroupItem[]>
       leaderboardDate: (params: LeaderboardDateParams) => Promise<AnyListen.Resource.TagItem[]>
       leaderboardDetail: (params: LeaderboardDetailParams) => Promise<ListCommonResult<AnyListen.Music.MusicInfoOnline>>
+      musicComment: (params: MusicCommentParams) => Promise<ListCommonResult<MusicComment>>
     }
 
     interface BackupDataAction {
