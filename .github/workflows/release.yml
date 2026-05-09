@@ -92,7 +92,7 @@ jobs:
           token: ${{ secrets.GH_TEMPLATE_PAT }}
 
       - name: Install Dependencies
-        run: corepack enable && pnpm -F ./packages/* install --frozen-lockfile
+        run: corepack enable && pnpm install --frozen-lockfile
 
       - name: Update template version
         run: |
@@ -110,5 +110,3 @@ jobs:
           git commit -m "chore: update @any-listen/extension-kit version to v$PACKAGE_VERSION in package.json"
           git remote set-url origin https://x-access-token:${{ secrets.GH_TEMPLATE_PAT }}@github.com/any-listen/extension-template.git
           git push origin main
-          git tag v$PACKAGE_VERSION
-          git push --tag
