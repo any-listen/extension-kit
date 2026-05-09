@@ -92,11 +92,11 @@ jobs:
           token: ${{ secrets.GH_TEMPLATE_PAT }}
 
       - name: Install Dependencies
-        run: corepack enable && npm install -g corepack@latest && pnpm -F ./packages/* install --frozen-lockfile
+        run: corepack enable && pnpm -F ./packages/* install --frozen-lockfile
 
       - name: Update template version
         run: |
-          pnpm -F ./packages/* install @any-listen/extension-kit@${{ needs.CheckTag.outputs.tag }}
+          pnpm -F ./packages/* add @any-listen/extension-kit@${{ needs.CheckTag.outputs.tag }}
           npm version patch --no-git-tag-version
 
       - name: Push Code

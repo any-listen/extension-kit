@@ -571,15 +571,22 @@ declare namespace AnyListen {
 
   namespace Resource {
     interface SongListItem {
-      play_count: string
       id: string
-      author: string
       name: string
+      play_count?: string
+      author?: string
       time?: string
-      img: string
+      img?: string
       // grade: basic.favorcnt / 10,
-      desc: string | null
+      desc?: string | null
       total?: number
+    }
+    interface SongListDetailInfo {
+      name: string
+      img?: string
+      desc?: string
+      author?: string
+      play_count?: string
     }
 
     interface CommonItem {
@@ -644,6 +651,9 @@ interface ListDetailParams extends CommonListParams {
 interface SonglistListParams extends CommonListParams {
   sort: string
   tag: string
+}
+interface SonglistDetailResult extends ListCommonResult<AnyListen.Music.MusicInfoOnline> {
+  info: AnyListen.Resource.SongListDetailInfo
 }
 interface LeaderboardDateParams extends CommonParams {
   id: string
@@ -735,6 +745,7 @@ declare global {
     type MusicInfo = AnyListen.Music.MusicInfo
     type MusicInfoOnline = AnyListen.Music.MusicInfoOnline
     type SongListItem = AnyListen.Resource.SongListItem
+    type SongListDetailInfo = AnyListen.Resource.SongListDetailInfo
     type CommonItem = AnyListen.Resource.CommonItem
     type TagItem = AnyListen.Resource.TagItem
     type TagGroupItem = AnyListen.Resource.TagGroupItem
@@ -1045,7 +1056,7 @@ declare global {
       songlistSorts: (params: CommonParams) => Promise<AnyListen.Resource.TagItem[]>
       songlistTags: (params: CommonParams) => Promise<AnyListen.Resource.TagGroupItem[]>
       songlist: (params: SonglistListParams) => Promise<ListCommonResult<AnyListen.Resource.SongListItem>>
-      songlistDetail: (params: ListDetailParams) => Promise<ListCommonResult<AnyListen.Music.MusicInfoOnline>>
+      songlistDetail: (params: ListDetailParams) => Promise<SonglistDetailResult>
       leaderboard: (params: CommonParams) => Promise<AnyListen.Resource.TagGroupItem[]>
       leaderboardDate: (params: LeaderboardDateParams) => Promise<AnyListen.Resource.TagItem[]>
       leaderboardDetail: (params: LeaderboardDetailParams) => Promise<ListCommonResult<AnyListen.Music.MusicInfoOnline>>
