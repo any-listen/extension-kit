@@ -648,6 +648,10 @@ interface SonglistSearchParams extends CommonListParams {
 interface ListDetailParams extends CommonListParams {
   id: string
 }
+interface SonglistTagResult {
+  tags: AnyListen.Resource.TagGroupItem[]
+  hotTags: AnyListen.Resource.TagItem[]
+}
 interface SonglistListParams extends CommonListParams {
   sort: string
   tag: string
@@ -1054,7 +1058,7 @@ declare global {
       lyricDetail: (params: LyricDetailParams) => Promise<AnyListen.Music.LyricInfo>
       songlistSearch: (params: SonglistSearchParams) => Promise<ListCommonResult<AnyListen.Resource.SongListItem>>
       songlistSorts: (params: CommonParams) => Promise<AnyListen.Resource.TagItem[]>
-      songlistTags: (params: CommonParams) => Promise<AnyListen.Resource.TagGroupItem[]>
+      songlistTags: (params: CommonParams) => Promise<SonglistTagResult>
       songlist: (params: SonglistListParams) => Promise<ListCommonResult<AnyListen.Resource.SongListItem>>
       songlistDetail: (params: ListDetailParams) => Promise<SonglistDetailResult>
       leaderboard: (params: CommonParams) => Promise<AnyListen.Resource.TagGroupItem[]>
