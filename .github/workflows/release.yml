@@ -96,7 +96,7 @@ jobs:
 
       - name: Update template version
         run: |
-          pnpm -F ./packages/* add @any-listen/extension-kit@${{ needs.CheckTag.outputs.tag }}
+          pnpm -F "./packages/*" add @any-listen/extension-kit@${{ needs.CheckTag.outputs.tag }}
           npm version patch --no-git-tag-version
 
       - name: Push Code
