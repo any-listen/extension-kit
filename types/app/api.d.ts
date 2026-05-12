@@ -12,6 +12,8 @@ declare namespace AnyListen {
   type AddMusicLocationType = 'top' | 'bottom'
 
   namespace Player {
+    type SourceType = 'local' | 'songlist' | 'topSongs' | 'search' | 'album'
+
     interface MusicInfo {
       id: string | null
       pic: string | null | undefined
@@ -41,9 +43,9 @@ declare namespace AnyListen {
        */
       listId: string
       /**
-       * 是否在线列表
+       * 列表类型
        */
-      isOnline: boolean
+      source: SourceType
       /**
        * 是否属于 “稍后播放”
        */
@@ -58,7 +60,7 @@ declare namespace AnyListen {
       duration: number
       index: number
       listId: string | null
-      isOnline: boolean
+      source: SourceType
       historyIndex: number
     }
 
@@ -190,12 +192,15 @@ declare namespace AnyListen {
       enabledRemove?: boolean
       usePolling?: boolean
     }
+    type SourceType = 'songlist' | 'topSongs' | 'search' | 'album'
     interface UserListInfoByOnlineMeta extends UserListInfoBaseMeta {
       extensionId: string
       source: string
       syncId: string
       syncTime: number
       picUrl: string | null
+      sourceType: SourceType
+      [key: string]: unknown
     }
     interface UserListInfoByRemoteMeta extends UserListInfoBaseMeta {
       extensionId: string
@@ -491,7 +496,7 @@ declare namespace AnyListen {
     interface PlayerActionSet {
       listId: string | null
       list: Player.PlayMusicInfo[]
-      isOnline: boolean
+      source: List.SourceType
       isSync?: boolean
     }
     interface PlayerActionAdd {
@@ -563,7 +568,7 @@ declare namespace AnyListen {
       info: SavedPlayInfo
       list: Player.PlayMusicInfo[]
       listId: string | null
-      isOnline: boolean
+      source: List.SourceType
       historyList: PlayHistoryListItem[]
       isCollect: boolean
     }
@@ -587,6 +592,7 @@ declare namespace AnyListen {
       desc?: string
       author?: string
       play_count?: string
+      date?: string
     }
 
     interface CommonItem {
@@ -599,7 +605,15 @@ declare namespace AnyListen {
       list: CommonItem[]
     }
 
-    type BoardItem = CommonItem
+    interface TopSongsItem extends CommonItem {
+      pic?: string
+    }
+    interface TopSongsDetailInfo {
+      name: string
+      pic?: string
+      desc?: string
+      date?: string
+    }
   }
 }
 
@@ -616,6 +630,12 @@ interface CommonParams {
 interface CommonListParams extends CommonParams {
   page: number
   limit: number
+}
+interface CommonSearchParams extends CommonListParams {
+  keyword: string
+}
+interface TipSearchParams extends CommonParams {
+  keyword: string
 }
 interface MusicSearchParams extends CommonListParams {
   name: string
@@ -642,9 +662,6 @@ interface PicSearchParams extends CommonParams {
   artist?: string
   interval?: number
 }
-interface SonglistSearchParams extends CommonListParams {
-  keyword: string
-}
 interface ListDetailParams extends CommonListParams {
   id: string
 }
@@ -659,12 +676,15 @@ interface SonglistListParams extends CommonListParams {
 interface SonglistDetailResult extends ListCommonResult<AnyListen.Music.MusicInfoOnline> {
   info: AnyListen.Resource.SongListDetailInfo
 }
-interface LeaderboardDateParams extends CommonParams {
+interface TopSongsDateParams extends CommonParams {
   id: string
 }
-interface LeaderboardDetailParams extends CommonListParams {
+interface TopSongsDetailParams extends CommonListParams {
   id: string
   date: string
+}
+interface TopSongsDetailResult extends ListCommonResult<AnyListen.Music.MusicInfoOnline> {
+  info: AnyListen.Resource.TopSongsDetailInfo
 }
 interface MusicCommentParams extends CommonListParams {
   musicInfo: AnyListen.Music.MusicInfoOnline
@@ -753,7 +773,8 @@ declare global {
     type CommonItem = AnyListen.Resource.CommonItem
     type TagItem = AnyListen.Resource.TagItem
     type TagGroupItem = AnyListen.Resource.TagGroupItem
-    type BoardItem = AnyListen.Resource.BoardItem
+    type TopSongsItem = AnyListen.Resource.TopSongsItem
+    type TopSongsDetailInfo = AnyListen.Resource.TopSongsDetailInfo
 
     type ParamsData = Record<string, string | number | null | undefined | boolean>
     interface RequestOptions {
@@ -989,9 +1010,9 @@ declare global {
          */
         listId: string
         /**
-         * 是否在线列表
+         * 列表类型
          */
-        isOnline: boolean
+        source: AnyListen.List.SourceType
         /**
          * 是否属于 “稍后播放”
          */
@@ -1047,7 +1068,7 @@ declare global {
     type MusicSearchResult = ListCommonResult<AnyListen.Music.MusicInfoOnline>
 
     interface ResourceAction {
-      tipSearch: (params: CommonParams) => Promise<string[]>
+      tipSearch: (params: TipSearchParams) => Promise<string[]>
       hotSearch: (params: CommonParams) => Promise<string[]>
       musicSearch: (params: MusicSearchParams) => Promise<ListCommonResult<AnyListen.Music.MusicInfoOnline>>
       musicPic: (params: MusicCommonParams) => Promise<string>
@@ -1056,14 +1077,14 @@ declare global {
       musicPicSearch: (params: PicSearchParams) => Promise<string[]>
       lyricSearch: (params: LyricSearchParams) => Promise<LyricSearchResult[]>
       lyricDetail: (params: LyricDetailParams) => Promise<AnyListen.Music.LyricInfo>
-      songlistSearch: (params: SonglistSearchParams) => Promise<ListCommonResult<AnyListen.Resource.SongListItem>>
+      songlistSearch: (params: CommonSearchParams) => Promise<ListCommonResult<AnyListen.Resource.SongListItem>>
       songlistSorts: (params: CommonParams) => Promise<AnyListen.Resource.TagItem[]>
       songlistTags: (params: CommonParams) => Promise<SonglistTagResult>
       songlist: (params: SonglistListParams) => Promise<ListCommonResult<AnyListen.Resource.SongListItem>>
       songlistDetail: (params: ListDetailParams) => Promise<SonglistDetailResult>
-      leaderboard: (params: CommonParams) => Promise<AnyListen.Resource.TagGroupItem[]>
-      leaderboardDate: (params: LeaderboardDateParams) => Promise<AnyListen.Resource.TagItem[]>
-      leaderboardDetail: (params: LeaderboardDetailParams) => Promise<ListCommonResult<AnyListen.Music.MusicInfoOnline>>
+      topSongs: (params: CommonParams) => Promise<AnyListen.Resource.TopSongsItem[]>
+      topSongsDate: (params: TopSongsDateParams) => Promise<AnyListen.Resource.TagItem[]>
+      topSongsDetail: (params: TopSongsDetailParams) => Promise<TopSongsDetailResult>
       musicComment: (params: MusicCommentParams) => Promise<ListCommonResult<MusicComment>>
     }
 
@@ -1099,7 +1120,20 @@ declare global {
         key: Uint8Array | string,
         iv: Uint8Array | string
       ) => Promise<string>
+      aesDecrypt: <T extends 'base64' | 'binary' | 'utf-8' = 'binary'>(
+        mode: AES_MODE,
+        data: Uint8Array | string,
+        key: Uint8Array | string,
+        iv: Uint8Array | string,
+        encoding?: T
+      ) => Promise<T extends 'binary' ? Uint8Array : string>
       rsaEncrypt: (mode: RSA_PADDING, data: Uint8Array, key: Uint8Array) => Promise<string>
+      rsaDecrypt: <T extends 'base64' | 'binary' | 'utf-8' = 'binary'>(
+        mode: RSA_PADDING,
+        data: Uint8Array,
+        key: Uint8Array,
+        encoding?: T
+      ) => Promise<T extends 'binary' ? Uint8Array : string>
       randomBytes: (size: number) => Promise<Uint8Array>
       md5: (text: string | Uint8Array) => Promise<string>
       sha1: (text: string | Uint8Array) => Promise<string>

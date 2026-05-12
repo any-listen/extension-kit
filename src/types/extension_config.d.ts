@@ -8,7 +8,7 @@ type ResourceAction =
   | 'musicUrl'
   | 'songlistSearch'
   | 'songlist'
-  | 'leaderboard'
+  | 'topSongs'
   | 'albumSearch'
   | 'album'
   | 'singerSearch'
