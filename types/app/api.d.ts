@@ -614,6 +614,22 @@ declare namespace AnyListen {
       desc?: string
       date?: string
     }
+
+    interface MusicCommentItem {
+      id: string
+      userId?: string
+      userName: string
+      text: string
+      time?: number
+      images?: string[]
+      location?: string
+      avatar?: string
+      likedCount?: number
+      skipPage?: boolean
+      replyTotal?: number
+      reply?: MusicCommentItem[]
+      replySkipPage?: boolean
+    }
   }
 }
 
@@ -629,7 +645,7 @@ interface CommonParams {
 }
 interface CommonListParams extends CommonParams {
   page: number
-  limit: number
+  limit?: number
 }
 interface CommonSearchParams extends CommonListParams {
   keyword: string
@@ -690,21 +706,6 @@ interface MusicCommentParams extends CommonListParams {
   musicInfo: AnyListen.Music.MusicInfoOnline
   id?: string
   type: 'hot' | 'new' | 'reply'
-}
-export interface MusicComment {
-  id: string
-  userId?: string
-  userName: string
-  text: string
-  time?: number
-  images?: string[]
-  location?: string
-  avatar?: string
-  likedCount?: number
-  skipPage?: boolean
-  replyTotal?: number
-  reply?: MusicComment[]
-  replySkipPage?: boolean
 }
 export interface ListCommonResult<T> {
   list: T[]
@@ -775,6 +776,7 @@ declare global {
     type TagGroupItem = AnyListen.Resource.TagGroupItem
     type TopSongsItem = AnyListen.Resource.TopSongsItem
     type TopSongsDetailInfo = AnyListen.Resource.TopSongsDetailInfo
+    type MusicCommentItem = AnyListen.Resource.MusicCommentItem
 
     type ParamsData = Record<string, string | number | null | undefined | boolean>
     interface RequestOptions {
@@ -785,7 +787,7 @@ declare global {
       maxRedirect?: number
       // signal?: AbortController['signal']
       signal?: unknown
-      json?: Record<string, unknown>
+      json?: Record<string, unknown> | unknown[]
       form?: Record<string, string | number | null | undefined | boolean>
       binary?: Uint8Array
       text?: string
@@ -1085,7 +1087,7 @@ declare global {
       topSongs: (params: CommonParams) => Promise<AnyListen.Resource.TopSongsItem[]>
       topSongsDate: (params: TopSongsDateParams) => Promise<AnyListen.Resource.TagItem[]>
       topSongsDetail: (params: TopSongsDetailParams) => Promise<TopSongsDetailResult>
-      musicComment: (params: MusicCommentParams) => Promise<ListCommonResult<MusicComment>>
+      musicComment: (params: MusicCommentParams) => Promise<ListCommonResult<AnyListen.Resource.MusicCommentItem>>
     }
 
     interface BackupDataAction {
