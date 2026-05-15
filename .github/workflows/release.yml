@@ -100,7 +100,6 @@ jobs:
           npm version patch --no-git-tag-version
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
           echo "PACKAGE_VERSION=$PACKAGE_VERSION"
-          git tag v$PACKAGE_VERSION
           git checkout package.json
           git config user.name "lyswhut"
           git config user.email "lyswhut@qq.com"
@@ -109,4 +108,5 @@ jobs:
           git commit -m "chore: update @any-listen/extension-kit version to v$PACKAGE_VERSION in package.json"
           git remote set-url origin https://x-access-token:${{ secrets.GH_TEMPLATE_PAT }}@github.com/any-listen/extension-template.git
           git push origin main
+          git tag v$PACKAGE_VERSION
           git push --tag
