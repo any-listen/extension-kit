@@ -61,17 +61,17 @@
     "@eslint/js": "^9.39.4",
     "@tsconfig/node24": "^24.0.4",
     "@tsconfig/recommended": "^1.0.13",
-    "@typescript-eslint/eslint-plugin": "^8.59.2",
-    "@typescript-eslint/parser": "^8.59.2",
+    "@typescript-eslint/eslint-plugin": "^8.59.3",
+    "@typescript-eslint/parser": "^8.59.3",
     "eslint-config-love": "^154.0.0",
     "globals": "^17.6.0",
-    "tar": "^7.5.14",
-    "vite": "^8.0.11"
+    "tar": "^7.5.15",
+    "vite": "^8.0.13"
   },
   "devDependencies": {
-    "@types/node": "^25.6.0",
+    "@types/node": "^25.8.0",
     "eslint": "^9.39.4",
-    "oxfmt": "^0.48.0",
+    "oxfmt": "^0.49.0",
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
