@@ -89,7 +89,7 @@ declare namespace AnyListen {
 
   namespace Music {
     type Source = string
-    type Quality = '128k' | '320k' | 'flac' | 'flac24bit' | '192k' | 'wav' | 'dobly' | 'master'
+    type Quality = '128k' | '320k' | 'flac' | 'flac24bit' | '192k' | 'wav' | 'dolby' | 'master'
     type FileType = 'mp3' | 'flac' | 'wav' | 'm4a'
 
     type MusicQualityType = Partial<
@@ -766,7 +766,7 @@ declare global {
     type Platform = 'mac' | 'linux' | 'windows' | 'android' | 'ios'
     type Architecture = 'arm' | 'arm64' | 'x86' | 'x64'
     type ClientType = 'desktop' | 'web' | 'mobile'
-    type Quality = '128k' | '320k' | 'flac' | 'flac24bit' | '192k' | 'wav' | 'dobly' | 'master'
+    type Quality = AnyListen.Music.Quality
     type MusicInfo = AnyListen.Music.MusicInfo
     type MusicInfoOnline = AnyListen.Music.MusicInfoOnline
     type SongListItem = AnyListen.Resource.SongListItem
