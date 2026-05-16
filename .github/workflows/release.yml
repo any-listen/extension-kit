@@ -108,5 +108,3 @@ jobs:
           git commit -m "chore: update @any-listen/extension-kit version to v$PACKAGE_VERSION in package.json"
           git remote set-url origin https://x-access-token:${{ secrets.GH_TEMPLATE_PAT }}@github.com/any-listen/extension-template.git
           git push origin main
-          git tag v$PACKAGE_VERSION
-          git push --tag
