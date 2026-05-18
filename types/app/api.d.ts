@@ -801,6 +801,7 @@ declare global {
       headers: Record<string, string | string[] | undefined>
       raw: Uint8Array
       body: Resp
+      history: string[]
     }
 
     type ConverterFormatFrom = 'base64' | 'hex' | 'utf-8'
