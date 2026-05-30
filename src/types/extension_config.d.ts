@@ -6,6 +6,7 @@ type ResourceAction =
   | 'musicPic'
   | 'musicLyric'
   | 'musicUrl'
+  | 'musicComment'
   | 'songlistSearch'
   | 'songlist'
   | 'topSongs'
