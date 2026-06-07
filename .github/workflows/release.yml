@@ -100,7 +100,6 @@ jobs:
           npm version patch --no-git-tag-version
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
           echo "PACKAGE_VERSION=$PACKAGE_VERSION"
-          git checkout package.json
           git config user.name "lyswhut"
           git config user.email "lyswhut@qq.com"
           git status
