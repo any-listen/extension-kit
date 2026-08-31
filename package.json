@@ -58,20 +58,20 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@eslint/js": "^9.39.4",
-    "@tsconfig/node24": "^24.0.4",
+    "@eslint/js": "^9.39.5",
+    "@tsconfig/node24": "^24.0.5",
     "@tsconfig/recommended": "^1.0.13",
-    "@typescript-eslint/eslint-plugin": "^8.60.0",
-    "@typescript-eslint/parser": "^8.60.0",
-    "eslint-config-love": "^154.0.0",
-    "globals": "^17.6.0",
-    "tar": "^7.5.15",
-    "vite": "^8.0.14"
+    "@typescript-eslint/eslint-plugin": "^8.68.0",
+    "@typescript-eslint/parser": "^8.68.0",
+    "eslint-config-love": "^155.0.0",
+    "globals": "^17.11.0",
+    "tar": "^7.5.22",
+    "vite": "^8.2.2"
   },
   "devDependencies": {
-    "@types/node": "^25.9.1",
-    "eslint": "^9.39.4",
-    "oxfmt": "^0.52.0",
+    "@types/node": "^25.9.5",
+    "eslint": "^9.39.5",
+    "oxfmt": "^0.65.0",
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
