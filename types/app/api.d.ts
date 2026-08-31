@@ -84,6 +84,7 @@ declare namespace AnyListen {
       maxTime: number
       index: number
       historyIndex: number
+      isLinkedList: boolean
     }
   }
 
@@ -127,6 +128,7 @@ declare namespace AnyListen {
       ext: string
       bitrateLabel: string | null
       sizeStr: string
+      deviceId: string
     }
 
     interface MusicInfoBase<IsLocal extends boolean> {
@@ -189,8 +191,11 @@ declare namespace AnyListen {
       deviceId: string
       path: string
       includeSubDir: boolean
+      lazzyParseMeta?: boolean
       enabledRemove?: boolean
+      syncTime: number
       usePolling?: boolean
+      ignorePermissionErrors?: boolean
     }
     type SourceType = 'songlist' | 'topSongs' | 'search' | 'album'
     interface UserListInfoByOnlineMeta extends UserListInfoBaseMeta {
@@ -198,13 +203,13 @@ declare namespace AnyListen {
       source: string
       syncId: string
       syncTime: number
-      picUrl: string | null
       sourceType: SourceType
       [key: string]: unknown
     }
     interface UserListInfoByRemoteMeta extends UserListInfoBaseMeta {
       extensionId: string
       source: string
+      lazzyParseMeta?: boolean
       syncTime: number
       [key: string]: unknown
     }
@@ -350,6 +355,9 @@ declare namespace AnyListen {
     interface UserListInfoLocalFull extends UserListInfoType<'local'> {
       list: Music.MusicInfo[]
     }
+    interface UserListInfoRemoteFull extends UserListInfoType<'remote'> {
+      list: Music.MusicInfo[]
+    }
     interface UserListInfoOnlineFull extends UserListInfoType<'online'> {
       list: Music.MusicInfo[]
     }
@@ -357,8 +365,8 @@ declare namespace AnyListen {
     interface ListDataFull {
       defaultList: MyDefaultListInfoFull
       loveList: MyLoveListInfoFull
-      lastPlayList: MyLastPlayListFull
-      userList: Array<UserListInfoGeneralFull | UserListInfoLocalFull | UserListInfoOnlineFull>
+      // lastPlayList: MyLastPlayListFull
+      userList: Array<UserListInfoGeneralFull | UserListInfoLocalFull | UserListInfoRemoteFull | UserListInfoOnlineFull>
     }
   }
   namespace IPCList {
@@ -491,12 +499,17 @@ declare namespace AnyListen {
       | IPCAction<'toggle'>
       | IPCAction<'skip', string>
       | IPCAction<'seek', number>
+      | IPCAction<'volume', number>
+      | IPCAction<'volumeMute', boolean>
+      | IPCAction<'playbackRate', number>
+      | IPCAction<'lyricOffset', number>
       | IPCAction<'collectStatus', boolean>
+      | IPCAction<'dislike'>
 
     interface PlayerActionSet {
       listId: string | null
       list: Player.PlayMusicInfo[]
-      source: List.SourceType
+      source: Player.SourceType
       isSync?: boolean
     }
     interface PlayerActionAdd {
@@ -563,12 +576,13 @@ declare namespace AnyListen {
       maxTime: number
       index: number
       historyIndex: number
+      isLinkedList: boolean
     }
     interface PlayInfo {
       info: SavedPlayInfo
       list: Player.PlayMusicInfo[]
       listId: string | null
-      source: List.SourceType
+      source: Player.SourceType
       historyList: PlayHistoryListItem[]
       isCollect: boolean
     }
@@ -777,10 +791,26 @@ declare global {
     type TopSongsItem = AnyListen.Resource.TopSongsItem
     type TopSongsDetailInfo = AnyListen.Resource.TopSongsDetailInfo
     type MusicCommentItem = AnyListen.Resource.MusicCommentItem
+    type PlayInfo = AnyListen.IPCPlayer.PlayInfo
 
     type ParamsData = Record<string, string | number | null | undefined | boolean>
     interface RequestOptions {
-      method?: 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'PATCH'
+      method?:
+        | 'GET'
+        | 'HEAD'
+        | 'POST'
+        | 'PUT'
+        | 'DELETE'
+        | 'OPTIONS'
+        | 'PATCH'
+        | 'PROPFIND'
+        | 'COPY'
+        | 'MOVE'
+        | 'MKCOL'
+        | 'PROPPATCH'
+        | 'QUOTA'
+        | 'LOCK'
+        | 'UNLOCK'
       query?: Record<string, string | number | null | undefined | boolean>
       headers?: Record<string, string | string[]>
       timeout?: number
@@ -924,7 +954,7 @@ declare global {
 
     interface SaveDialogOptions {
       /** The resource the dialog shows when opened. */
-      // defaultPath?: string
+      defaultFileName?: string
       /** A human-readable string for the save button. */
       saveLabel?: string
       /**
@@ -945,6 +975,8 @@ declare global {
        * (for example, macOS).
        */
       title: string
+      /** Allow to select folder, defaults to `false`. */
+      canSelectFolder?: boolean
     }
 
     /** 环境相关 */
@@ -992,48 +1024,10 @@ declare global {
       listAction: (action: AnyListen.IPCList.ActionList) => Promise<void>
       onListAction: (handler: (action: AnyListen.IPCList.ActionList) => unknown) => () => void
     }
-    interface PlayInfo {
-      info: {
-        time: number
-        maxTime: number
-        index: number
-        historyIndex: number
-      }
-      list: Array<{
-        /**
-         * 当前信息唯一ID
-         */
-        itemId: string
-        /**
-         * 当前播放歌曲的列表 id
-         */
-        musicInfo: AnyListen.Music.MusicInfo
-        /**
-         * 当前播放歌曲的列表 id
-         */
-        listId: string
-        /**
-         * 列表类型
-         */
-        source: AnyListen.List.SourceType
-        /**
-         * 是否属于 “稍后播放”
-         */
-        playLater: boolean
-        /**
-         * 是否已播放
-         */
-        played: boolean
-      }>
-      listId: string | null
-      historyList: Array<{
-        id: string
-        time: number
-      }>
-    }
+
     interface Player {
       /** 获取播放信息 */
-      getPlayInfo: () => Promise<PlayInfo>
+      getPlayInfo: () => Promise<AnyListen.IPCPlayer.PlayInfo>
       playListAction: (action: AnyListen.IPCPlayer.PlayListAction) => Promise<void>
       playerAction: (action: AnyListen.IPCPlayer.ActionPlayer) => Promise<void>
       playHistoryListAction: (action: AnyListen.IPCPlayer.PlayHistoryListAction) => Promise<void>
@@ -1192,6 +1186,7 @@ declare global {
       storage: Storage
       configuration: Configuration
       registerResourceAction: (actions: Partial<ResourceAction>) => void
+      registerListProviderAction: (actions: Partial<ListProviderAction>) => void
       // TODO
       // backup: {
       //   runBackup: (opts: { backupData?: Array<'list' | 'dislike'> }) => Promise<void>
