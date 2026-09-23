@@ -11,7 +11,7 @@ export interface BuildConfig {
   isolatePreloadEntry?: string
 }
 
-export interface ExtensionConfig extends Manifest {
+export interface ExtensionConfig extends Omit<Manifest, 'main'> {
   buildConfig?: BuildConfig
 }
 
