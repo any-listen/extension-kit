@@ -111,7 +111,9 @@ export interface Manifest {
   license?: string
   categories?: string[]
   tags?: string[]
+  main: string
   grant?: Grant[]
+  readme?: string
   contributes?: {
     resource?: Array<{
       id: string
